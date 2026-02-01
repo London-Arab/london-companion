@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>London Companion – Guide for Arab Visitors</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <!-- Leaflet CSS for interactive maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-o9N1jRCkANjv++7cWJ/qoF1gZQzQ0jr8z38jCPl0asM=" crossorigin="" />
   <style>
     body {font-family: Arial, sans-serif; margin:0; padding:0; color:#333; line-height:1.6;}
     header {background:#0c5cbf; color:#fff; padding:40px 20px; text-align:center;}
@@ -29,6 +31,42 @@
     footer {background:#0c5cbf; color:#fff; padding:20px; text-align:center;}
     @media (max-width:600px) {
       nav ul {flex-direction:column; align-items:center;}
+    }
+
+    /* Simple map container for embedding Google Maps without API key */
+    .map-container {
+      margin-top:20px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      overflow:hidden;
+    }
+
+    /* Large interactive map container for Leaflet */
+    .map-large {
+      height:350px;
+      width:100%;
+      margin-top:20px;
+      border:1px solid #ccc;
+      border-radius:8px;
+    }
+    /* Search input styling */
+    .search-bar {
+      width:100%;
+      padding:8px 10px;
+      border:1px solid #ccc;
+      border-radius:4px;
+      margin-top:10px;
+    }
+    /* List of places */
+    .place-list {
+      list-style-type:disc;
+      margin-top:10px;
+      margin-left:20px;
+    }
+    .map-container iframe {
+      width:100%;
+      height:300px;
+      border:0;
     }
   </style>
 </head>
@@ -58,43 +96,141 @@
     <section id="shopping">
       <h2><span class="icon"><i class="fas fa-shopping-bag"></i></span>Shopping</h2>
       <p>London is Europe’s most visited shopping city. <strong>Oxford Street</strong> alone boasts more than 300 retailers, ranging from high‑street fashion and department stores to designer flagships. Nearby <strong>Regent Street</strong> and <strong>Bond Street</strong> offer luxury boutiques and flagship stores, while <strong>Westfield London</strong> in Shepherd’s Bush contains hundreds of shops and restaurants under one roof. For high‑end shopping and exclusive brands, explore the famous department stores of Knightsbridge such as Harrods and Harvey Nichols.</p>
+
+      <ul class="place-list">
+        <li>Oxford Street</li>
+        <li>Regent Street</li>
+        <li>Bond Street</li>
+        <li>Westfield London (Shepherd's Bush)</li>
+        <li>Harrods (Knightsbridge)</li>
+        <li>Harvey Nichols</li>
+        <li>Selfridges London</li>
+        <li>Liberty London</li>
+        <li>Westfield Stratford City</li>
+        <li>Burlington Arcade</li>
+      </ul>
+      <input type="text" id="shopping-search" class="search-bar" placeholder="Search shopping locations...">
+      <div id="shopping-map" class="map-large"></div>
     </section>
     
     <section id="restaurants">
       <h2><span class="icon"><i class="fas fa-utensils"></i></span>Restaurants</h2>
       <p>London’s culinary scene spans Michelin‑starred dining rooms, vibrant street‑food markets and neighbourhood cafés. For halal options, try:</p>
-      <ul>
-        <li><em>Ramo Ramen</em> in Soho – a halal‑certified ramen bar blending Filipino and Japanese flavours; popular dishes include miso‑baked shrimp dumplings and creative broths.</li>
-        <li><em>Etles Uyghur Restaurant</em> in Walthamstow – run by a husband‑and‑wife team, serving hand‑pulled noodles, lamb skewers and other authentic Uyghur dishes.</li>
-        <li><em>Marvee’s Food Shop</em> in Paddington – a Caribbean restaurant where everything is halal, from hearty goat curry to creamy mac and cheese.</li>
-        <li><em>Gymkhana</em> in Mayfair – an elegant Indian restaurant with two Michelin stars offering tandoori meats, biryanis and kebabs.</li>
+      <ul class="place-list">
+        <li>Ramo Ramen (Soho)</li>
+        <li>Etles Uyghur Restaurant (Walthamstow)</li>
+        <li>Marvee’s Food Shop (Paddington)</li>
+        <li>Gymkhana (Mayfair)</li>
+        <li>Dishoom Covent Garden</li>
+        <li>Honest Burgers Soho</li>
+        <li>The Halal Guys (Leicester Square)</li>
+        <li>Tayyabs (Whitechapel)</li>
+        <li>Roti King (Euston)</li>
+        <li>Tinseltown Farringdon</li>
       </ul>
       <p>For non‑halal dining, London offers world cuisines from British gastropubs and European brasseries to Asian fusion and modern street food. You’ll also find Lebanese and Turkish restaurants along Edgware Road and Bayswater.</p>
+      <input type="text" id="restaurants-search" class="search-bar" placeholder="Search restaurants...">
+      <div id="restaurants-map" class="map-large"></div>
     </section>
 
     <section id="history">
       <h2><span class="icon"><i class="fas fa-landmark"></i></span>Historical Sites</h2>
       <p>Explore London’s rich history, from Roman beginnings to Victorian splendour. The <strong>Tower of London</strong> traces over 900 years of royal history and is home to the Crown Jewels. Tour <strong>Buckingham Palace</strong>, the official residence of the monarch, and discover the stories of <strong>Westminster Abbey</strong>, where monarchs have been crowned for centuries. Don’t miss <strong>St Paul’s Cathedral</strong> with its baroque dome, <strong>Shakespeare’s Globe</strong> theatre and the <strong>British Museum</strong>, which houses artefacts from around the world. Many of these sites offer guided tours that bring the past to life.</p>
+
+      <ul class="place-list">
+        <li>Tower of London</li>
+        <li>Buckingham Palace</li>
+        <li>Westminster Abbey</li>
+        <li>St Paul's Cathedral</li>
+        <li>British Museum</li>
+        <li>Shakespeare's Globe</li>
+        <li>Kensington Palace</li>
+        <li>Hampton Court Palace</li>
+        <li>Churchill War Rooms</li>
+        <li>Royal Observatory Greenwich</li>
+      </ul>
+      <input type="text" id="history-search" class="search-bar" placeholder="Search historic sites...">
+      <div id="history-map" class="map-large"></div>
     </section>
 
     <section id="parks">
       <h2><span class="icon"><i class="fas fa-tree"></i></span>Parks</h2>
       <p>London is home to eight Royal Parks—Hyde Park, Kensington Gardens, St James’s Park, Green Park, Regent’s Park, Greenwich Park, Bushy Park and Richmond Park—which offer peaceful green spaces amid the bustling city. Enjoy boating on the Serpentine in Hyde Park, watch pelicans being fed in St James’s Park or explore the rose gardens of Regent’s Park. Deer roam freely in Richmond Park, while Greenwich Park provides panoramic views across the River Thames. These parks include playgrounds, cafés and scenic paths for families and nature lovers.</p>
+
+      <ul class="place-list">
+        <li>Hyde Park</li>
+        <li>Kensington Gardens</li>
+        <li>St James's Park</li>
+        <li>Green Park</li>
+        <li>Regent's Park</li>
+        <li>Greenwich Park</li>
+        <li>Bushy Park</li>
+        <li>Richmond Park</li>
+        <li>Hampstead Heath</li>
+        <li>Battersea Park</li>
+      </ul>
+      <input type="text" id="parks-search" class="search-bar" placeholder="Search parks...">
+      <div id="parks-map" class="map-large"></div>
     </section>
 
     <section id="attractions">
       <h2><span class="icon"><i class="fas fa-star"></i></span>Attractions</h2>
       <p>London’s attractions are among the most iconic in the world. Uncover centuries of royal history and see the Crown Jewels at the Tower of London or watch the Changing of the Guard at Buckingham Palace. Take a ride on the London Eye for panoramic views of the skyline and explore the magnificent architecture of Westminster Abbey. Don’t miss the Warner Bros. Studio Tour – The Making of Harry Potter, where you can step onto the sets of the film series. The city also boasts world‑class museums such as the British Museum, Tate Modern and the Victoria and Albert Museum, many of which are free to enter.</p>
+
+      <ul class="place-list">
+        <li>London Eye</li>
+        <li>Tower Bridge</li>
+        <li>Warner Bros. Studio Tour (The Making of Harry Potter)</li>
+        <li>Tate Modern</li>
+        <li>Victoria and Albert Museum</li>
+        <li>Science Museum</li>
+        <li>Natural History Museum</li>
+        <li>National Gallery</li>
+        <li>Madame Tussauds</li>
+        <li>London Zoo</li>
+      </ul>
+      <input type="text" id="attractions-search" class="search-bar" placeholder="Search attractions...">
+      <div id="attractions-map" class="map-large"></div>
     </section>
 
     <section id="rooftops">
       <h2><span class="icon"><i class="fas fa-mountain"></i></span>Rooftop Experiences</h2>
       <p>For spectacular views of London’s skyline, visit rooftop venues such as the <strong>Sky Garden</strong>, London’s highest public garden with landscaped terraces and a 360‑degree viewing platform—free but bookable in advance. Savour cocktails and fusion dishes at <strong>Sushisamba City</strong>, which boasts one of the highest outdoor terraces in Europe and panoramic views across the City. <strong>Aviary London</strong> offers stylish interiors, creative cocktails and a spacious terrace overlooking the capital; in winter, cosy igloos provide al‑fresco dining year‑round. Elsewhere, rooftop bars along South Bank and the City combine drinks and dining with breathtaking vistas.</p>
+
+      <ul class="place-list">
+        <li>Sky Garden</li>
+        <li>Sushisamba (Bishopsgate)</li>
+        <li>Aviary</li>
+        <li>Radio Rooftop</li>
+        <li>12th Knot</li>
+        <li>Netil360</li>
+        <li>Queen of Hoxton</li>
+        <li>Pergola Paddington</li>
+        <li>Madison</li>
+        <li>Frank's Cafe</li>
+      </ul>
+      <input type="text" id="rooftops-search" class="search-bar" placeholder="Search rooftops...">
+      <div id="rooftops-map" class="map-large"></div>
     </section>
 
     <section id="shisha">
       <h2><span class="icon"><i class="fas fa-smoking"></i></span>Shisha Cafes</h2>
       <p>London has a variety of shisha lounges where you can unwind. In Knightsbridge, <strong>17 on Sloane</strong> features a heated terrace with classic and signature shisha blends, located just off Sloane Street only moments from Harrods. It opens daily from 6 pm until 1 am and prides itself on attentive service and pairing shisha with drinks and mocktails. Along Edgware Road and in Westminster you’ll also find Middle Eastern cafés and lounges serving shisha alongside Arabic coffee and snacks, all within a 30‑minute drive from Harrods.</p>
+
+      <ul class="place-list">
+        <li>17 on Sloane</li>
+        <li>Coco Grill & Lounge</li>
+        <li>The Banc</li>
+        <li>Maya Lounge</li>
+        <li>The Shisha Garden</li>
+        <li>Café Cairo</li>
+        <li>Mamounia Lounge (Mayfair)</li>
+        <li>Drunch</li>
+        <li>Tigerbay Shisha Lounge</li>
+        <li>Hookah Lounge</li>
+      </ul>
+      <input type="text" id="shisha-search" class="search-bar" placeholder="Search shisha cafes...">
+      <div id="shisha-map" class="map-large"></div>
     </section>
 
     <section id="services">
@@ -122,5 +258,134 @@
   <footer>
     <p>&copy; 2026 London Companion. All rights reserved.</p>
   </footer>
+  <!-- Leaflet JS for interactive maps -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-BuANLUlzH0yoynZMhUlCT3VkOITkk58FmAS7R4yv2w4=" crossorigin=""></script>
+  <script>
+    // Data arrays for interactive maps
+    const shoppingPlaces = [
+      {name: "Oxford Street", lat: 51.515419, lng: -0.141099},
+      {name: "Regent Street", lat: 51.5108, lng: -0.1387},
+      {name: "Bond Street", lat: 51.5145, lng: -0.1494},
+      {name: "Westfield London (Shepherd's Bush)", lat: 51.5070, lng: -0.2240},
+      {name: "Harrods (Knightsbridge)", lat: 51.499405, lng: -0.163119},
+      {name: "Harvey Nichols", lat: 51.5011, lng: -0.1597},
+      {name: "Selfridges London", lat: 51.5142, lng: -0.1540},
+      {name: "Liberty London", lat: 51.5130, lng: -0.1409},
+      {name: "Westfield Stratford City", lat: 51.5444, lng: -0.0099},
+      {name: "Burlington Arcade", lat: 51.5095, lng: -0.1420}
+    ];
+    const restaurantsPlaces = [
+      {name: "Ramo Ramen (Soho)", lat: 51.5144, lng: -0.1317},
+      {name: "Etles Uyghur Restaurant (Walthamstow)", lat: 51.5850, lng: -0.0188},
+      {name: "Marvee’s Food Shop (Paddington)", lat: 51.5150, lng: -0.1758},
+      {name: "Gymkhana (Mayfair)", lat: 51.5076, lng: -0.1445},
+      {name: "Dishoom Covent Garden", lat: 51.5124, lng: -0.1269},
+      {name: "Honest Burgers Soho", lat: 51.5128, lng: -0.1319},
+      {name: "The Halal Guys (Leicester Square)", lat: 51.5103, lng: -0.1308},
+      {name: "Tayyabs (Whitechapel)", lat: 51.5183, lng: -0.0635},
+      {name: "Roti King (Euston)", lat: 51.5288, lng: -0.1350},
+      {name: "Tinseltown Farringdon", lat: 51.5213, lng: -0.1043}
+    ];
+    const historyPlaces = [
+      {name: "Tower of London", lat: 51.5081, lng: -0.0759},
+      {name: "Buckingham Palace", lat: 51.5014, lng: -0.1419},
+      {name: "Westminster Abbey", lat: 51.4993, lng: -0.1273},
+      {name: "St Paul's Cathedral", lat: 51.5138, lng: -0.0984},
+      {name: "British Museum", lat: 51.5194, lng: -0.1270},
+      {name: "Shakespeare's Globe", lat: 51.5081, lng: -0.0975},
+      {name: "Kensington Palace", lat: 51.5059, lng: -0.1877},
+      {name: "Hampton Court Palace", lat: 51.4036, lng: -0.3389},
+      {name: "Churchill War Rooms", lat: 51.5020, lng: -0.1292},
+      {name: "Royal Observatory Greenwich", lat: 51.4769, lng: -0.0005}
+    ];
+    const parksPlaces = [
+      {name: "Hyde Park", lat: 51.5073, lng: -0.1657},
+      {name: "Kensington Gardens", lat: 51.5056, lng: -0.1793},
+      {name: "St James's Park", lat: 51.5027, lng: -0.1347},
+      {name: "Green Park", lat: 51.5030, lng: -0.1427},
+      {name: "Regent's Park", lat: 51.5313, lng: -0.1569},
+      {name: "Greenwich Park", lat: 51.4769, lng: 0.0005},
+      {name: "Bushy Park", lat: 51.4093, lng: -0.3371},
+      {name: "Richmond Park", lat: 51.4427, lng: -0.2734},
+      {name: "Hampstead Heath", lat: 51.5607, lng: -0.1604},
+      {name: "Battersea Park", lat: 51.4780, lng: -0.1505}
+    ];
+    const attractionsPlaces = [
+      {name: "London Eye", lat: 51.5033, lng: -0.1195},
+      {name: "Tower Bridge", lat: 51.5055, lng: -0.0754},
+      {name: "Warner Bros. Studio Tour", lat: 51.6927, lng: -0.4182},
+      {name: "Tate Modern", lat: 51.5076, lng: -0.0994},
+      {name: "Victoria and Albert Museum", lat: 51.4966, lng: -0.1722},
+      {name: "Science Museum", lat: 51.4978, lng: -0.1745},
+      {name: "Natural History Museum", lat: 51.4967, lng: -0.1764},
+      {name: "National Gallery", lat: 51.5089, lng: -0.1283},
+      {name: "Madame Tussauds", lat: 51.5230, lng: -0.1545},
+      {name: "London Zoo", lat: 51.5353, lng: -0.1534}
+    ];
+    const rooftopsPlaces = [
+      {name: "Sky Garden", lat: 51.5113, lng: -0.0830},
+      {name: "Sushisamba (Bishopsgate)", lat: 51.5145, lng: -0.0803},
+      {name: "Aviary", lat: 51.5206, lng: -0.0872},
+      {name: "Radio Rooftop", lat: 51.5094, lng: -0.1196},
+      {name: "12th Knot", lat: 51.5082, lng: -0.1047},
+      {name: "Netil360", lat: 51.5459, lng: -0.0558},
+      {name: "Queen of Hoxton", lat: 51.5268, lng: -0.0792},
+      {name: "Pergola Paddington", lat: 51.5193, lng: -0.1737},
+      {name: "Madison", lat: 51.5123, lng: -0.0959},
+      {name: "Frank's Cafe", lat: 51.4718, lng: -0.0686}
+    ];
+    const shishaPlaces = [
+      {name: "17 on Sloane", lat: 51.5006, lng: -0.1586},
+      {name: "Coco Grill & Lounge", lat: 51.5020, lng: -0.0719},
+      {name: "The Banc", lat: 51.5855, lng: -0.0829},
+      {name: "Maya Lounge", lat: 51.6304, lng: -0.1877},
+      {name: "The Shisha Garden", lat: 51.5988, lng: -0.2747},
+      {name: "Café Cairo", lat: 51.4664, lng: -0.1223},
+      {name: "Mamounia Lounge (Mayfair)", lat: 51.5078, lng: -0.1500},
+      {name: "Drunch", lat: 51.5092, lng: -0.1470},
+      {name: "Tigerbay Shisha Lounge", lat: 51.5362, lng: -0.1284},
+      {name: "Hookah Lounge", lat: 51.5207, lng: -0.1422}
+    ];
+    // Generic function to initialize maps with markers and search
+    function initMap(sectionId, places, defaultView) {
+      const mapElementId = sectionId + '-map';
+      const map = L.map(mapElementId).setView(defaultView, 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+      const markers = [];
+      places.forEach((place) => {
+        const marker = L.marker([place.lat, place.lng]).addTo(map).bindPopup(place.name);
+        markers.push(marker);
+      });
+      const searchInput = document.getElementById(sectionId + '-search');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          const query = searchInput.value.toLowerCase();
+          markers.forEach((marker, index) => {
+            const name = places[index].name.toLowerCase();
+            if (name.includes(query)) {
+              if (!map.hasLayer(marker)) {
+                marker.addTo(map);
+              }
+            } else {
+              if (map.hasLayer(marker)) {
+                map.removeLayer(marker);
+              }
+            }
+          });
+        });
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      initMap('shopping', shoppingPlaces, [51.5135, -0.1400]);
+      initMap('restaurants', restaurantsPlaces, [51.5120, -0.1300]);
+      initMap('history', historyPlaces, [51.5055, -0.1270]);
+      initMap('parks', parksPlaces, [51.5150, -0.1500]);
+      initMap('attractions', attractionsPlaces, [51.5074, -0.1278]);
+      initMap('rooftops', rooftopsPlaces, [51.5100, -0.1100]);
+      initMap('shisha', shishaPlaces, [51.5150, -0.1350]);
+    });
+  </script>
 </body>
 </html>
